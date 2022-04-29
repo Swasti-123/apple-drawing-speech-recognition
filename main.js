@@ -5,7 +5,6 @@ draw_apple = "";
 
 screen_width=0;
 screnn_height=0;
-apple="apple.png";
 speak_data="";
 to_number="";
 
@@ -21,7 +20,7 @@ function start()
 } 
  
 recognition.onresult = function(event) {
-
+console.log("onresult happened")
  console.log(event); 
 
  content = event.results[0][0].transcript;
@@ -32,6 +31,7 @@ recognition.onresult = function(event) {
 
   if(Number.isInteger(to_number)){
     document.getElementById("status").innerHTML="Started drawing apple/apples";
+    draw_apple="set";
   }
 
   else{
@@ -43,7 +43,8 @@ recognition.onresult = function(event) {
 function setup() {
  screen_width= window.innerWidth;
  screen_height= window.innerHeight;
- createCanvas(screen_width, screen_height-150);
+ canvas=createCanvas(screen_width, screen_height-150);
+ canvas.position(0,150);
  console.log("setup complete");
 }
 
@@ -53,21 +54,18 @@ function draw() {
     document.getElementById("status").innerHTML = to_number + " Apples drawn";
     draw_apple = "";
 
-    for(var i=1; i<= to_numberandomr; i++){
-      x=Math.floor(Math.random()*700);
+    for(var i=1; i<= to_number; i++){
+      x=Math.floor(Math.random()*1000);
       y=Math.floor(Math.random()*400);
-      s=Math.floor(Math.random()*500);
-      image(apple, x, y, s,s)
+      image(apple, x, y, 50, 50);
     }
     
+    document.getElementById("status").innerHTML= to_number + "Apples drawn";
+
+    speak_data=to_number + "Apples drawn";
+
+    speak();
   }
-
-  document.getElementById("status").innerHTML= to_number + "Apples drawn";
-
-  speak_data=to_number + "Apples drawn";
-
-  speak();
-  console.log("draw complete");
 }
 
 function speak(){
@@ -79,11 +77,10 @@ function speak(){
 
     speak_data = "";
 
-    console.log("speak complete");
 }
 
 
 function preload(){
-  loadImage(apple);
+ apple= loadImage("apple.png");
   console.log("preload complete");
 }
